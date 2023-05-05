@@ -1,13 +1,17 @@
 import { World } from './World/World';
 
 async function main() {
-  const container = document.querySelector('#scene-container');
-  const world = new World(container);
-  await world.init();
+  try {
+    const container = document.querySelector('#scene-container');
+    const world = new World(container);
+    await world.init();
 
-  world.start();
+    world.start();
+  }
+
+  catch(error) {
+    console.log(error);
+  }
 }
 
-main().catch((err) => {
-  console.error(err);
-});
+main();

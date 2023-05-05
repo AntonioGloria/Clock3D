@@ -8,15 +8,20 @@ const textureFiles = [
 ]
 
 async function clockMaterial() {
-  const [colorMap, roughnessMap, normalMap] = await loadTextures(textureFiles);
+  try {
+    const [colorMap, roughnessMap, normalMap] = await loadTextures(textureFiles);
+    const clockMaterial = new MeshStandardMaterial({
+      map: colorMap,
+      roughnessMap: roughnessMap,
+      normalMap: normalMap
+    });
 
-  const clockMaterial = new MeshStandardMaterial({
-    map: colorMap,
-    roughnessMap: roughnessMap,
-    normalMap: normalMap
-  });
+    return clockMaterial;
+  }
 
-  return clockMaterial;
+  catch(error) {
+    console.log(error);
+  }
 }
 
 export { clockMaterial }

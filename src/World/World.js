@@ -37,16 +37,22 @@ class World {
   }
 
   async init() {
-    const clockParts = await loadClockParts();
-    const clockModel = new ClockModel(clockParts);
-    clockModel.face.material = await clockMaterial();
+    try {
+      const clockParts = await loadClockParts();
+      const clockModel = new ClockModel(clockParts);
+      clockModel.face.material = await clockMaterial();
 
-    const bgEnvMap = await loadEnvTexture(bgEnvMapPath);
-    scene.environment = bgEnvMap;
+      const bgEnvMap = await loadEnvTexture(bgEnvMapPath);
+      scene.environment = bgEnvMap;
 
-    controls.target.copy(clockModel.position);
-    scene.add(clockModel);
-    loop.updatables.push(clockModel);
+      controls.target.copy(clockModel.position);
+      scene.add(clockModel);
+      loop.updatables.push(clockModel);
+    }
+
+    catch(error) {
+      console.log(error);
+    }
   }
 
   render() {

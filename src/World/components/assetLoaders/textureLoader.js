@@ -5,10 +5,16 @@ const exrLoader = new EXRLoader();
 const texLoader = new TextureLoader();
 
 async function loadEnvTexture(filePath) {
-  const exrMap = await exrLoader.loadAsync(filePath);
-  exrMap.mapping = EquirectangularReflectionMapping;
+  try {
+    const exrMap = await exrLoader.loadAsync(filePath);
+    exrMap.mapping = EquirectangularReflectionMapping;
 
-  return exrMap;
+    return exrMap;
+  }
+
+  catch(error) {
+    console.log(error);
+  }
 }
 
 async function loadTextures(filePaths) {

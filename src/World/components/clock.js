@@ -1,14 +1,10 @@
 import { Group, MathUtils } from "three";
 
 class ClockModel extends Group {
-  constructor(parts) {
+  constructor(models) {
     super();
     // Define and add clock parts models
-    this.frame = parts.frame;
-    this.face = parts.face;
-    this.handSS = parts.handSS;
-    this.handMM = parts.handMM;
-    this.handHH = parts.handHH;
+    [this.frame, this.face, this.handSS, this.handMM, this.handHH] = models;
 
     this.add(
       this.frame,

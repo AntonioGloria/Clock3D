@@ -1,29 +1,17 @@
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
-function setupModel(data) {
-  const model = data.scene.children[0];
-  return model;
-}
+const gltfLoader = new GLTFLoader();
 
-async function loadClockParts() {
+async function loadModels(filePaths) {
   try {
-    const loader = new GLTFLoader();
+    const models = await Promise.all(
+      filePaths.map(async filePath => {
+        const modelData = await gltfLoader.loadAsync(filePath);
+        return modelData.scene.children[0];
+      })
+    );
 
-    const [frameData, faceData, handHHData, handMMData, handSSData] = await Promise.all([
-      loader.loadAsync('/assets/models/ClockFrame.glb'),
-      loader.loadAsync('/assets/models/ClockFace.glb'),
-      loader.loadAsync('/assets/models/Clock_Hand_HH.glb'),
-      loader.loadAsync('/assets/models/Clock_Hand_MM.glb'),
-      loader.loadAsync('/assets/models/Clock_Hand_SS.glb'),
-    ]);
-
-    const frame = setupModel(frameData);
-    const face = setupModel(faceData);
-    const handHH = setupModel(handHHData);
-    const handMM = setupModel(handMMData);
-    const handSS = setupModel(handSSData);
-
-    return { frame, face, handHH, handMM, handSS };
+    return models;
   }
 
   catch(error) {
@@ -31,4 +19,4 @@ async function loadClockParts() {
   }
 }
 
-export { loadClockParts };
+export { loadModels };

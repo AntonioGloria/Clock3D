@@ -1,4 +1,4 @@
-import { loadClockParts } from './components/assetLoaders/modelLoader.js';
+import { loadModels } from './components/assetLoaders/modelLoader.js';
 import { loadEnvTexture } from './components/assetLoaders/textureLoader.js';
 import { clockMaterial } from './components/material.js';
 import { ClockModel } from './components/clock.js';
@@ -17,7 +17,14 @@ let renderer;
 let scene;
 let loop;
 
-let bgEnvMapPath = '/assets/textures/environment/wooden_lounge_1k.exr'
+const bgEnvMapPath = '/assets/textures/environment/wooden_lounge_1k.exr'
+const modelPaths = [
+  '/assets/models/ClockFrame.glb',
+  '/assets/models/ClockFace.glb',
+  '/assets/models/Clock_Hand_SS.glb',
+  '/assets/models/Clock_Hand_MM.glb',
+  '/assets/models/Clock_Hand_HH.glb'
+];
 
 class World {
   constructor(container) {
@@ -38,7 +45,7 @@ class World {
 
   async init() {
     try {
-      const clockParts = await loadClockParts();
+      const clockParts = await loadModels(modelPaths);
       const clockModel = new ClockModel(clockParts);
       clockModel.face.material = await clockMaterial();
 

@@ -1,5 +1,6 @@
 import { loadClockParts } from './components/assetLoaders/modelLoader.js';
 import { loadEnvTexture } from './components/assetLoaders/textureLoader.js';
+import { clockMaterial } from './components/material.js';
 import { ClockModel } from './components/clock.js';
 import { createCamera } from './components/camera.js';
 import { createLights } from './components/lights.js';
@@ -38,6 +39,7 @@ class World {
   async init() {
     const clockParts = await loadClockParts();
     const clockModel = new ClockModel(clockParts);
+    clockModel.face.material = await clockMaterial();
 
     const bgEnvMap = await loadEnvTexture(bgEnvMapPath);
     scene.environment = bgEnvMap;

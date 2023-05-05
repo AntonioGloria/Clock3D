@@ -1,7 +1,8 @@
-import { EquirectangularReflectionMapping } from 'three';
+import { EquirectangularReflectionMapping, TextureLoader } from 'three';
 import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader';
 
 const exrLoader = new EXRLoader();
+const texLoader = new TextureLoader();
 
 async function loadEnvTexture(filePath) {
   const exrMap = await exrLoader.loadAsync(filePath);
@@ -10,4 +11,23 @@ async function loadEnvTexture(filePath) {
   return exrMap;
 }
 
-export { loadEnvTexture };
+async function loadTextures(filePaths) {
+  try {
+    const textures = await Promise.all(
+      filePaths.map(async filePath => {
+        const texture = await texLoader.loadAsync(filePath);
+        texture.flipY = false;
+        texture.needsUpdate = true;
+        return texture;
+      })
+    );
+
+    return textures;
+  }
+
+  catch(error) {
+    console.log(error);
+  }
+}
+
+export { loadTextures, loadEnvTexture };

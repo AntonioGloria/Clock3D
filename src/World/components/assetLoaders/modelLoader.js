@@ -8,10 +8,9 @@ function setupModel(data) {
 async function loadClockParts() {
   const loader = new GLTFLoader();
 
-  const [frameData, faceData, coverData,handHHData, handMMData, handSSData] = await Promise.all([
+  const [frameData, faceData, handHHData, handMMData, handSSData] = await Promise.all([
     loader.loadAsync('/assets/models/ClockFrame.glb'),
     loader.loadAsync('/assets/models/ClockFace.glb'),
-    loader.loadAsync('/assets/models/ClockCover.glb'),
     loader.loadAsync('/assets/models/Clock_Hand_HH.glb'),
     loader.loadAsync('/assets/models/Clock_Hand_MM.glb'),
     loader.loadAsync('/assets/models/Clock_Hand_SS.glb'),
@@ -19,12 +18,11 @@ async function loadClockParts() {
 
   const frame = setupModel(frameData);
   const face = setupModel(faceData);
-  const cover = setupModel(coverData);
   const handHH = setupModel(handHHData);
   const handMM = setupModel(handMMData);
   const handSS = setupModel(handSSData);
 
-  return { frame, face, cover, handHH, handMM, handSS };
+  return { frame, face, handHH, handMM, handSS };
 }
 
 export { loadClockParts };

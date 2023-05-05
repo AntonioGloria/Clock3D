@@ -6,14 +6,13 @@ class ClockModel extends Group {
     // Define and add clock parts models
     this.frame = parts.frame;
     this.face = parts.face;
-    this.cover = parts.cover;
     this.handSS = parts.handSS;
     this.handMM = parts.handMM;
     this.handHH = parts.handHH;
+
     this.add(
       this.frame,
       this.face,
-      this.cover,
       this.handHH,
       this.handMM,
       this.handSS

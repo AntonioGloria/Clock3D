@@ -51,6 +51,7 @@ class World {
 
       const bgEnvMap = await loadEnvTexture(bgEnvMapPath);
       scene.environment = bgEnvMap;
+      scene.environmentIntensity = 0.1;
 
       controls.target.copy(clockModel.position);
       scene.add(clockModel);

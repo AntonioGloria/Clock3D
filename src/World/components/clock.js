@@ -7,6 +7,8 @@ class ClockModel extends Group {
     [this.frame, this.face, this.handSS, this.handMM, this.handHH] = models;
 
     for (const model of models) {
+      model.castShadow = true;
+      model.receiveShadow = true;
       this.add(model);
     }
 

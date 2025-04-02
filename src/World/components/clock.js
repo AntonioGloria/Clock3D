@@ -19,41 +19,45 @@ class ClockModel extends Group {
     this.hours = this.startTime.getHours();
 
     // Calculate and set starting angles for hands
-    this.radSS = -MathUtils.degToRad(6);
-    this.radHH = -MathUtils.degToRad(30);
+    this.rateSSMM = 6;
+    this.rateHH = 30;
 
-    this.offsetMM = -6 * this.seconds / 60;
-    this.offsetHH = -30 * this.minutes / 60;
+    const offsetMM = this.seconds / 60;
+    const offsetHH = this.minutes / 60;
 
-    this.startSS = -6 * this.seconds;
-    this.startMM = -6 * this.minutes + this.offsetMM;
-    this.startHH = -30 * (this.hours % 12) + this.offsetHH;
+    this.minutes += offsetMM;
+    this.hours += offsetHH;
 
-    this.handSS.rotation.z = MathUtils.degToRad(this.startSS);
-    this.handMM.rotation.z = MathUtils.degToRad(this.startMM);
-    this.handHH.rotation.z = MathUtils.degToRad(this.startHH);
+    this.handSS.rotation.z = this.timeToRad(this.seconds, "s");
+    this.handMM.rotation.z = this.timeToRad(this.minutes, "m");
+    this.handHH.rotation.z = this.timeToRad(this.hours, "h");
   }
 
   tick(delta) {
-    this.handSS.rotation.z += this.radSS * delta;
-    this.handMM.rotation.z += this.radSS / 60 * delta;
-    this.handHH.rotation.z += this.radHH / 3600 * delta;
+    // Update time and rotate hands accordingly
+    this.handSS.rotation.z = this.timeToRad(Math.floor(this.seconds), "s");
+    this.handMM.rotation.z = this.timeToRad(this.minutes, "m");
+    this.handHH.rotation.z = this.timeToRad(this.hours, "h");
+
+    this.seconds = (this.seconds + delta) % 60;
+    this.minutes = (this.minutes + (delta / 60)) % 60;
+    this.hours = (this.hours + (delta / 3600)) % 24;
+  }
+
+  timeToRad(num, type) {
+    return type === "s" || type === "m"
+      ? -MathUtils.degToRad(6 * num)
+      : -MathUtils.degToRad(30 * (num % 12));
   }
 
   // TODO: Potentially use this function to change either background color,
   // lighting or environment maps to reflect real-life lighting based on time
-  calculateTime() {
-    let degHH = MathUtils.radToDeg(this.handHH.rotation.z);
-    let hours = -Math.ceil(degHH / 360 * 12) % 12;
-
-    let degMM = MathUtils.radToDeg(this.handMM.rotation.z);
-    let minutes = -Math.ceil(degMM / 360 * 60) % 60;
-
-    let degSS = MathUtils.radToDeg(this.handSS.rotation.z);
-    let seconds = -Math.ceil(degSS / 360 * 60) % 60;
-
-    let time = { hours, minutes, seconds };
-    console.log(time);
+  readTime() {
+    return {
+      hours: Math.floor(this.hours),
+      minutes: Math.floor(this.minutes),
+      seconds: Math.floor(this.seconds)
+    }
   }
 }
 

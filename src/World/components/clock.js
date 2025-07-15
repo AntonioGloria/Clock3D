@@ -1,4 +1,5 @@
 import { Group, MathUtils } from "three";
+import { animate } from "animejs";
 
 class ClockModel extends Group {
   constructor(models) {
@@ -19,35 +20,54 @@ class ClockModel extends Group {
     this.hours = this.startTime.getHours();
 
     // Calculate and set starting angles for hands
-    this.rateSSMM = 6;
-    this.rateHH = 30;
+    this.minutes += this.seconds / 60;
+    this.hours += this.minutes / 60;
 
-    const offsetMM = this.seconds / 60;
-    const offsetHH = this.minutes / 60;
+    this.handSS.rotation.z = -MathUtils.degToRad(6 * this.seconds);
+    this.handMM.rotation.z = -MathUtils.degToRad(6 * this.minutes);
+    this.handHH.rotation.z = -MathUtils.degToRad(30 * (this.hours % 12));
 
-    this.minutes += offsetMM;
-    this.hours += offsetHH;
-
-    this.handSS.rotation.z = this.timeToRad(this.seconds, "s");
-    this.handMM.rotation.z = this.timeToRad(this.minutes, "m");
-    this.handHH.rotation.z = this.timeToRad(this.hours, "h");
+    this.animateHands();
   }
 
-  tick(delta) {
-    // Update time and rotate hands accordingly
-    this.handSS.rotation.z = this.timeToRad(Math.floor(this.seconds), "s");
-    this.handMM.rotation.z = this.timeToRad(this.minutes, "m");
-    this.handHH.rotation.z = this.timeToRad(this.hours, "h");
+  animateHands() {
+    const duration = 250;
+    const delay = 750;
+    const ease = 'outBounce';
 
-    this.seconds = (this.seconds + delta) % 60;
-    this.minutes = (this.minutes + (delta / 60)) % 60;
-    this.hours = (this.hours + (delta / 3600)) % 24;
-  }
+    animate(this.handHH.rotation, {
+      z: {
+        to: `-=${MathUtils.degToRad(1/600)}`,
+        ease: ease,
+        duration: duration,
+        delay: delay
+      },
+    });
 
-  timeToRad(num, type) {
-    return type === "s" || type === "m"
-      ? -MathUtils.degToRad(6 * num)
-      : -MathUtils.degToRad(30 * (num % 12));
+    animate(this.handMM.rotation, {
+      z: {
+        to: `-=${MathUtils.degToRad(1/10)}`,
+        ease: ease,
+        duration: duration,
+        delay: delay
+      },
+    });
+
+    animate(this.handSS.rotation, {
+      z: {
+        to: `-=${MathUtils.degToRad(6)}`,
+        ease: ease,
+        duration: duration,
+        delay: delay
+      },
+
+      onComplete: () => {
+        this.seconds = (this.seconds + 1) % 60;
+        this.minutes = (this.minutes + 1/60) % 60;
+        this.hours = (this.hours + 1/3600) % 24;
+        this.animateHands()
+      }
+    })
   }
 
   // TODO: Potentially use this function to change either background color,

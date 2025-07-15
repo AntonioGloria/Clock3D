@@ -7,6 +7,7 @@ Clock3D is a simple app that displays a 3D Clock in a web browser. This project 
 - JavaScript
     - [three.js](https://threejs.org/)
     - [Vite](https://vitejs.dev/)
+    - [animejs](https://animejs.com/)
 - [Blender 3.4.0](https://www.blender.org/)
 
 ## Acknowledgements

@@ -55,7 +55,6 @@ class World {
 
       controls.target.copy(clockModel.position);
       scene.add(clockModel);
-      loop.updatables.push(clockModel);
     }
 
     catch(error) {
